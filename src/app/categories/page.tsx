@@ -1,6 +1,7 @@
 // app/categories/page.tsx
 import Image from "next/image";
 import getAllCategories from "@/apis/AllCategories";
+import { Category } from "@/types/categories.type";
 
 export default async function CategoriesPage() {
   const categories = await getAllCategories();
@@ -12,7 +13,7 @@ export default async function CategoriesPage() {
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {categories.map((cat: any) => (
+        {categories.map((cat: Category) => (
           <div
             key={cat._id}
             className="rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer overflow-hidden bg-card border border-border"

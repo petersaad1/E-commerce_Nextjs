@@ -3,15 +3,41 @@
 import { AddToWish } from "@/WishListActions/AddToWish";
 import { getUserWishAction } from "@/WishListActions/getUserWish";
 import { removeWishItemAction } from "@/WishListActions/removeWishItem";
+import { wishproduct } from "@/types/wish.type";
 import { toast } from "sonner";
 
 import React, { createContext, useEffect, useState } from "react";
 
-export const wishContext = createContext({});
+/**
+ * Small generic API response shape used for non-wish-specific endpoints.
+ */
+type ApiResponse<T = unknown> = {
+  status: string;
+  message?: string;
+  data?: T;
+};
+
+type WishContextType = {
+  numOfWishItems: number;
+  products: wishproduct[];
+  isLoading: boolean;
+  addProductToWish: (id: string) => Promise<ApiResponse | undefined>;
+  removeWishItem: (id: string) => Promise<ApiResponse | undefined>;
+  getUserWish: () => Promise<void>;
+};
+
+export const wishContext = createContext<WishContextType>({
+  numOfWishItems: 0,
+  products: [],
+  isLoading: false,
+  addProductToWish: async () => undefined,
+  removeWishItem: async () => undefined,
+  getUserWish: async () => {},
+});
 
 const WishContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [numOfWishItems, setNumOfWishItems] = useState(0);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<wishproduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   async function addProductToWish(id: string) {
@@ -40,7 +66,7 @@ const WishContextProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       return data;
-    } catch (error) {
+    } catch {
       toast.error("Failed to remove product", {
         duration: 3000,
         position: "top-center",

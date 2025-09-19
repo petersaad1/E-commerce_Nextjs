@@ -1,6 +1,6 @@
 import React from "react";
 import AllProducts from "@/apis/AllProducts";
-import { product } from "@/types/Products.type";
+import { product } from "@/types/products.type";
 import HomeCard from './../_component/HomeCard/HomeCard';
 
 

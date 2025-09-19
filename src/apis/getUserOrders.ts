@@ -7,8 +7,8 @@ export async function getUserOrders(){
   
     const token = await getMyToken()
 
-    const {id} = jwtDecode(token)
-
+    const {id}: {id:string} = jwtDecode(token as string)
+    
     if(!token) {
         throw new Error("Login First")
     }

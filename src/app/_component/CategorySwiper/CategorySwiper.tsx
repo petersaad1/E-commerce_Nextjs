@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import Image from 'next/image';
-import { Category } from '@/types/Products.type';
+import { Category } from '@/types/categories.type';
 
 function CategorySwiper({ categories } : { categories: Category[] }) {
   return (

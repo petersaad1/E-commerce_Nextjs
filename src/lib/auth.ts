@@ -1,8 +1,34 @@
-import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { jwtDecode } from "jwt-decode";
 
-export const authOptions: AuthOptions = {
+interface CustomSession {
+  user?: {
+    name?: string;
+    email?: string;
+    role?: string;
+  };
+}
+
+interface CustomToken {
+  user?: {
+    name?: string;
+    email?: string;
+    role?: string;
+  };
+  token?: string;
+}
+
+interface CustomUser {
+  id: string;
+  user: {
+    name: string;
+    email: string;
+    role: string;
+  };
+  token: string;
+}
+
+export const authOptions = {
   pages: {
     signIn: "/login",
   },
@@ -26,7 +52,7 @@ export const authOptions: AuthOptions = {
         const payload = await res.json();
 
         if (payload.message === "success") {
-          const decoded: any = jwtDecode(payload.token);
+          const decoded: { id?: string; userId?: string; [key: string]: unknown } = jwtDecode(payload.token);
 
           return {
             id: decoded.id || decoded.userId || payload.user._id,
@@ -41,18 +67,18 @@ export const authOptions: AuthOptions = {
   ],
 
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: CustomSession; token: CustomToken }) {
       if (token) {
-        session.user = token?.user 
+        session.user = token.user;
       }
-      return session
+      return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: CustomToken; user?: CustomUser }) {
       if (user) {
-        token.user = user?.user
-        token.token = user?.token
+        token.user = user.user;
+        token.token = user.token;
       }
-      return token
+      return token;
     }
   }
 };

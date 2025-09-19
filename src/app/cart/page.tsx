@@ -2,7 +2,6 @@
 import { cartContext } from "@/Context/CartContext";
 import React, { useContext } from "react";
 import { Button } from "@/components/ui/button";
-import { product } from "./../../types/products.type";
 import { cartProduct } from "@/types/cart.type";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -19,6 +18,14 @@ const Cart = () => {
   async function removeItem(id: string) {
     const data = await removeCartItem(id);
 
+    if (!data) {
+      toast.error("Failed to remove this product", {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
+
     if (data.status === "success") {
       toast.success("Product deleted", {
         duration: 3000,
@@ -34,6 +41,14 @@ const Cart = () => {
 
   async function updateItem(id: string, count: number) {
     const data = await updateCartItem(id, count);
+
+    if (!data) {
+      toast.error("Failed to update this product", {
+        duration: 3000,
+        position: "top-center",
+      });
+      return;
+    }
 
     if (data.status === "success") {
       toast.success("Product updated", {

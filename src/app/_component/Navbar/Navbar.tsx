@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "@/Context/ThemeContext";
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
 

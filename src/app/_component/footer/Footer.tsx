@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -21,24 +21,24 @@ export default function Footer() {
           <h4 className="font-semibold mb-3">Quick Links</h4>
           <ul className="space-y-2">
             <li>
-              <a href="/" className="hover:text-green-500 transition">
+              <Link href="/" className="hover:text-green-500 transition">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/product" className="hover:text-green-500 transition">
+              <Link href="/product" className="hover:text-green-500 transition">
                 Products
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/categories" className="hover:text-green-500 transition">
+              <Link href="/categories" className="hover:text-green-500 transition">
                 Categories
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/brands" className="hover:text-green-500 transition">
+              <Link href="/brands" className="hover:text-green-500 transition">
                 Brands
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

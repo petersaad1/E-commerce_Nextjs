@@ -44,8 +44,9 @@ export default function VerifyCodePage() {
         duration: 1000,
       });
       router.push("/resetPassword");
-    } catch (err: any) {
-      toast.error(err.message || "Invalid code", {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Invalid code";
+      toast.error(errorMessage, {
         position: "top-center",
         duration: 1000,
       });

@@ -1,6 +1,7 @@
 // app/brands/page.tsx
 import Image from "next/image";
 import AllBrands from "@/apis/AllBrands";
+import { Brand } from "@/types/products.type";
 
 export default async function BrandsPage() {
   const brands = await AllBrands();
@@ -17,7 +18,7 @@ export default async function BrandsPage() {
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          {brands.map((brand: any) => (
+          {brands.map((brand: Brand) => (
             <div
               key={brand._id}
               className="rounded-xl shadow-md hover:shadow-lg hover:scale-105 transition-transform cursor-pointer overflow-hidden block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-300"

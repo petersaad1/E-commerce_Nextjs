@@ -34,13 +34,14 @@ function ForgetPassword() {
   async function handleForget(values: { email: string }) {
     setIsLoading(true);
     try {
-      const res = await forgetPassword(values.email);
+      await forgetPassword(values.email);
       toast.success("Check your email for reset code", {
         position: "top-center",
         duration: 1000,
       });
       router.push("/VerifyCodePage");
-    } catch (err) {
+    } catch (error) {
+      console.error("Error sending reset code:", error);
       toast.error("Error sending reset code", {
         position: "top-center",
         duration: 1000,

@@ -50,8 +50,15 @@ function Register() {
         duration: 1000,
       });
       router.push("/login");
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Error", {
+    } catch (error: unknown) {
+      let errorMessage = "Error";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        errorMessage = axiosError.response?.data?.message || "Error";
+      }
+      toast.error(errorMessage, {
         position: "top-center",
         duration: 1000,
       });

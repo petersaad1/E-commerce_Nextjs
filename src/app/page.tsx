@@ -3,7 +3,7 @@ import HomeCard from "./_component/HomeCard/HomeCard";
 import AllProducts from "@/apis/AllProducts";
 import MainSlider from "./_component/MainSlider/MainSlider";
 import CategorySlider from "./_component/CategorySlider/CategorySlider";
-import { product } from "@/types/Products.type";
+import { product } from "@/types/products.type";
 
 
 

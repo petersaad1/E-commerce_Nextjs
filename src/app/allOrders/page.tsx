@@ -1,6 +1,7 @@
 import { getUserOrders } from "@/apis/getUserOrders";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Order, OrderItem } from "@/types/order.type";
 import Image from "next/image";
 
 const AllOrders = async () => {
@@ -21,7 +22,7 @@ const AllOrders = async () => {
       </h1>
 
       <div className="space-y-6">
-        {orders.map((order: any) => (
+        {orders.map((order: Order) => (
           <Card
             key={order._id}
             className="shadow-md rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors duration-300"
@@ -52,7 +53,7 @@ const AllOrders = async () => {
               </p>
 
               <div className="space-y-2">
-                {order.cartItems.map((item: any) => (
+                {order.cartItems.map((item: OrderItem) => (
                   <div
                     key={item._id}
                     className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 pb-2 transition-colors duration-300"

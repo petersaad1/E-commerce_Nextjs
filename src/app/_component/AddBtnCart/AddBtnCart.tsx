@@ -4,24 +4,35 @@ import { cartContext } from "@/Context/CartContext";
 import React, { useContext } from "react";
 import { toast } from "sonner";
 
-function AddBtnCart({ id, onAdded }: { id: string, onAdded?: () => void }) {
-  const {addProductToCart} = useContext(cartContext)
+function AddBtnCart({ id, onAdded }: { id: string; onAdded?: () => void }) {
+  const { addProductToCart } = useContext(cartContext);
+
   async function handleAddToCart() {
     const data = await addProductToCart(id);
 
+    // guard against undefined response
+    if (!data) {
+      toast.error("Failed to add product to cart", {
+        duration: 1000,
+        position: "top-center",
+      });
+      return;
+    }
+
     if (data.status === "success") {
-      toast.success(data.message, {
+      toast.success(data.message ?? "Added to cart", {
         duration: 1000,
         position: "top-center",
       });
       if (onAdded) onAdded();
     } else {
-      toast.error("fail to add this product in cart", {
+      toast.error(data.message ?? "Fail to add this product to cart", {
         duration: 1000,
         position: "top-center",
       });
     }
   }
+
   return (
     <div>
       <Button

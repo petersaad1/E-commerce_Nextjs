@@ -6,9 +6,8 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { product } from "@/types/Products.type";
+import { product } from "@/types/products.type";
 import AddBtnCart from "../AddBtnCart/AddBtnCart";
 import WishlistBtn from "../AddBtnWish/AddBtnWish";
 

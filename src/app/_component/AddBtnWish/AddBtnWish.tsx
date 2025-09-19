@@ -30,8 +30,8 @@ export default function WishlistBtn({ id, onToggle }: Props) {
       setIsFav(next);
       if (onToggle) onToggle(next);
 
-      if (data.status === "success") {
-        toast.success(data.message, {
+      if (data?.status === "success") {
+        toast.success(data.message ?? "Added to wishlist", {
           duration: 1000,
           position: "top-center",
         });

@@ -46,8 +46,9 @@ function ResetPassword() {
         duration: 1000,
       });
       router.push("/login");
-    } catch (err: any) {
-      toast.error(err.message || "Error resetting password", {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Error resetting password";
+      toast.error(errorMessage, {
         position: "top-center",
         duration: 1000,
       });
