@@ -1,15 +1,25 @@
 "use client"
 
-import { getClientToken } from '@/utilities/clientToken';
+import { getSession } from 'next-auth/react';
 import axios from 'axios';
 import { cart } from '@/types/cart.type';
 
 export async function getClientUserCart(): Promise<cart | null> {
   try {
-    const token = await getClientToken();
+    const session = await getSession();
     
-    if (!token) {
+    if (!session) {
       throw new Error("Login First");
+    }
+
+    // Get token from session
+    const sessionWithToken = session as (typeof session & { token: string });
+    const token = sessionWithToken.token;
+
+    if (!token) {
+      console.log("No API token found in session");
+      console.log("Session contents:", session);
+      throw new Error("No authentication token found");
     }
 
     const response = await axios.get('https://ecommerce.routemisr.com/api/v1/cart', {

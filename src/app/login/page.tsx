@@ -39,24 +39,48 @@ function Login() {
   async function handleLogin(values: LoginType) {
     setIsLoading(true);
 
-    const res = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
+    try {
+      const res = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
 
-    if (res?.error) {
-      toast.error(res.error, {
+      console.log("SignIn response:", res);
+
+      if (res?.error) {
+        console.error("Login error:", res.error);
+        toast.error(res.error, {
+          position: "top-center",
+          duration: 1000,
+        });
+        setIsLoading(false);
+      } else if (res?.ok) {
+        console.log("Login successful");
+        toast.success("Login Success", {
+          position: "top-center",
+          duration: 1000,
+        });
+        
+        // Wait a bit for session to be established
+        setTimeout(() => {
+          router.push("/");
+        }, 500);
+      } else {
+        console.error("Unexpected login response:", res);
+        toast.error("Login failed - unexpected response", {
+          position: "top-center",
+          duration: 1000,
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Login exception:", error);
+      toast.error("Login failed - network error", {
         position: "top-center",
         duration: 1000,
       });
       setIsLoading(false);
-    } else {
-      toast.success("Login Success", {
-        position: "top-center",
-        duration: 1000,
-      });
-      router.push("/");
     }
   }
 
