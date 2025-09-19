@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/form";
 import * as z from "zod";
 import { verifyResetCode } from "@/apis/verifyResetCode";
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme } from "@/Context/ThemeContext";
 
 const verifySchema = z.object({
   resetCode: z.string().min(6, "Reset code must be at least 6 digits"),

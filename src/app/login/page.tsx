@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import loginSchema, { LoginType } from "@/schema/login.schema";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme } from "@/Context/ThemeContext";
 
 function Login() {
   const [IsLoading, setIsLoading] = useState(false);

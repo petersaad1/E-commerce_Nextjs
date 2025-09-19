@@ -8,7 +8,7 @@ import { Menu, Sun, Moon } from "lucide-react";
 import { cartContext } from "@/Context/CartContext";
 import { wishContext } from "@/Context/wishlistContext";
 import { usePathname } from "next/navigation";
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme } from "@/Context/ThemeContext";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
