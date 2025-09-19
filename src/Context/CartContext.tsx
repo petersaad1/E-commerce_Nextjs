@@ -1,10 +1,11 @@
 "use client";
 import { AddToCart } from "@/CartActions/addToCart";
 import { clearCartItemAction } from "@/CartActions/clearCartAction";
-import { getUserCartAction } from "@/CartActions/getUserCart";
+import { getClientUserCart } from "@/CartActions/getClientUserCart";
 import { removeCartItemAction } from "@/CartActions/removeCartItem";
 import { updateCartItemAction } from "@/CartActions/updateCartAction";
 import { cart, cartProduct } from "@/types/cart.type";
+import { useSession } from "next-auth/react";
 
 import React, { createContext, useEffect, useState } from "react";
 
@@ -46,6 +47,7 @@ export const cartContext = createContext<CartContextType>({
 });
 
 const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const { status } = useSession();
   const [numOfCartItems, setNumOfCartItems] = useState(0);
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [products, setProducts] = useState<cartProduct[]>([]);
@@ -103,11 +105,13 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   async function getUserCart() {
     setisLoading(true);
     try {
-      const data: cart = await getUserCartAction();
-      setNumOfCartItems(data.numOfCartItems);
-      setTotalCartPrice(data.data.totalCartPrice);
-      setProducts(data.data.products);
-      setCartId(data.cartId);
+      const data: cart | null = await getClientUserCart();
+      if (data) {
+        setNumOfCartItems(data.numOfCartItems);
+        setTotalCartPrice(data.data.totalCartPrice);
+        setProducts(data.data.products);
+        setCartId(data.cartId);
+      }
       setisLoading(false);
     } catch (error) {
       console.log(error);
@@ -123,8 +127,10 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   useEffect(function () {
-    getUserCart();
-  }, []);
+    if (status === "authenticated") {
+      getUserCart();
+    }
+  }, [status]);
 
   return (
     <cartContext.Provider

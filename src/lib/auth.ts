@@ -7,6 +7,7 @@ interface CustomSession {
     email?: string;
     role?: string;
   };
+  token?: string; // Add token to session
 }
 
 interface CustomToken {
@@ -31,6 +32,20 @@ interface CustomUser {
 export const authOptions = {
   pages: {
     signIn: "/login",
+  },
+  session: {
+    strategy: "jwt" as const,
+  },
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: false, // Set to true in production with HTTPS
+      }
+    }
   },
   providers: [
     CredentialsProvider({
@@ -70,6 +85,7 @@ export const authOptions = {
     async session({ session, token }: { session: CustomSession; token: CustomToken }) {
       if (token) {
         session.user = token.user;
+        session.token = token.token; // Include API token in session
       }
       return session;
     },

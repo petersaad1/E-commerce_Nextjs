@@ -2,7 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ["ecommerce.routemisr.com"], 
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ecommerce.routemisr.com',
+        port: '',
+        pathname: '/**',
+      }
+    ],
   },
 };
 

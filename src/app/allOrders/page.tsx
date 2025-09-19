@@ -1,11 +1,92 @@
-import { getUserOrders } from "@/apis/getUserOrders";
+"use client";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { getClientUserOrders } from "@/apis/getClientUserOrders";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Order, OrderItem } from "@/types/order.type";
 import Image from "next/image";
+import Link from "next/link";
 
-const AllOrders = async () => {
-  const orders = await getUserOrders();
+const AllOrders = () => {
+  const { status } = useSession();
+  const router = useRouter();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (status === "loading") return; // Still loading session
+
+    if (status === "unauthenticated") {
+      router.push("/login");
+      return;
+    }
+
+    if (status === "authenticated") {
+      fetchOrders();
+    }
+  }, [status, router]);
+
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const ordersData = await getClientUserOrders();
+      setOrders(ordersData?.data || []);
+    } catch (err) {
+      setError("Failed to load orders. Please try logging in again.");
+      console.error("Error fetching orders:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (status === "loading" || loading) {
+    return (
+      <div className="max-w-md mx-auto my-20 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto"></div>
+        <p className="mt-4 text-gray-600 dark:text-gray-400">Loading orders...</p>
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <div className="max-w-md mx-auto my-20 text-center">
+        <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+          Authentication Required
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
+          Please log in to view your orders.
+        </p>
+        <Link 
+          href="/login"
+          className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors"
+        >
+          Go to Login
+        </Link>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-md mx-auto my-20 text-center">
+        <h1 className="text-2xl font-bold mb-4 text-red-600">Error</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
+        <Button onClick={fetchOrders} className="mr-4">
+          Retry
+        </Button>
+        <Link 
+          href="/login"
+          className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition-colors"
+        >
+          Login Again
+        </Link>
+      </div>
+    );
+  }
 
   if (!orders || orders.length === 0) {
     return (

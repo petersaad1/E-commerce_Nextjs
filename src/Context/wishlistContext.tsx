@@ -1,10 +1,11 @@
 "use client";
 
 import { AddToWish } from "@/WishListActions/AddToWish";
-import { getUserWishAction } from "@/WishListActions/getUserWish";
+import { getClientUserWish } from "@/WishListActions/getClientUserWish";
 import { removeWishItemAction } from "@/WishListActions/removeWishItem";
 import { wishproduct } from "@/types/wish.type";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 import React, { createContext, useEffect, useState } from "react";
 
@@ -36,6 +37,7 @@ export const wishContext = createContext<WishContextType>({
 });
 
 const WishContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const { status } = useSession();
   const [numOfWishItems, setNumOfWishItems] = useState(0);
   const [products, setProducts] = useState<wishproduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,10 +79,10 @@ const WishContextProvider = ({ children }: { children: React.ReactNode }) => {
   async function getUserWish() {
     setIsLoading(true);
     try {
-      const data = await getUserWishAction();
-      const list = data?.data ?? data ?? [];
+      const data = await getClientUserWish();
+      const list = data?.data ?? [];
       setProducts(Array.isArray(list) ? list : []);
-      setNumOfWishItems(list.length || 0);
+      setNumOfWishItems(Array.isArray(list) ? list.length : 0);
 
       setIsLoading(false);
     } catch (error) {
@@ -90,8 +92,10 @@ const WishContextProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   useEffect(() => {
-    getUserWish();
-  }, []);
+    if (status === "authenticated") {
+      getUserWish();
+    }
+  }, [status]);
 
   return (
     <wishContext.Provider
