@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { forgetPassword } from "@/apis/ForgetPassword";
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme } from "@/Context/ThemeContext";
 
 function ForgetPassword() {
   const [IsLoading, setIsLoading] = useState(false);
