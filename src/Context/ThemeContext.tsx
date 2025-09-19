@@ -34,7 +34,6 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   if (!mounted) {
-    // تغطية الشاشة لمنع Flash قبل React
     const storedTheme =
       typeof window !== "undefined" ? localStorage.getItem("darkMode") : "false";
     const isDark = storedTheme === "true";
